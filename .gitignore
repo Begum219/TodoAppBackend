@@ -1,0 +1,18 @@
+## Visual Studio
+.vs/
+*.suo
+*.user
+
+## Build results
+bin/
+obj/
+Debug/
+Release/
+
+## NuGet
+packages/
+*.nupkg
+
+## Database
+*.mdf
+*.ldf

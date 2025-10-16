@@ -60,8 +60,21 @@ namespace TodoApp.Application.Services
             if (!isPasswordValid)
                 throw new Exception("Email veya şifre hatalı.");
 
-            // Token üret
-            return await GenerateTokenAsync(user);
+            if (user.TwoFactorEnabled)
+            {
+                // 2FA kodu gönderilmemiş
+                if (string.IsNullOrEmpty(request.TwoFactorCode))
+                    throw new Exception("2FA kodu gerekli");
+
+                // 2FA kodunu doğrula
+                var twoFactorService = new TwoFactorAuthService();
+                var isValid = twoFactorService.ValidateCode(user.TwoFactorSecretKey!, request.TwoFactorCode);
+
+                if (!isValid)
+                    throw new Exception("Geçersiz 2FA kodu");
+            }
+                // Token üret
+                return await GenerateTokenAsync(user);
         }
 
         public async Task<TokenDTO> RefreshTokenAsync(string refreshToken)
@@ -76,7 +89,7 @@ namespace TodoApp.Application.Services
             return await GenerateTokenAsync(user);
         }
 
-        // ✅ Yardımcı metod: Gerçek JWT token üretimi
+        //  Yardımcı metod: Gerçek JWT token üretimi
         private async Task<TokenDTO> GenerateTokenAsync(User user)
         {
             // JWT claims
@@ -126,7 +139,7 @@ namespace TodoApp.Application.Services
             };
         }
 
-        // ✅ Refresh token üretimi
+        //  Refresh token üretimi
         private string GenerateRefreshToken()
         {
             var randomNumber = new byte[64];

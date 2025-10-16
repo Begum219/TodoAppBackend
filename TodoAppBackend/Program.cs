@@ -17,7 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // ========== Dependency Injection ==========
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();  // ✅ DOĞRU YERİ BURASI
-
+builder.Services.AddScoped<TwoFactorAuthService>();
 // ========== JWT Authentication ==========
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var secretKey = jwtSettings["SecretKey"] ?? throw new Exception("JWT SecretKey bulunamadı");

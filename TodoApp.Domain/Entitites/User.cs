@@ -21,6 +21,10 @@ namespace TodoApp.Domain.Entitites
         public string? RefreshToken { get; set; }
 
         public DateTime? RefreshTokenExpiryTime { get; set; }
+        
+        // 2 faktörlü doğrulama için eklendi 
+        public bool TwoFactorEnabled { get; set; } = false;
+        public string? TwoFactorSecretKey { get; set; }
 
 
     }
